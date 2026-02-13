@@ -1,5 +1,18 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Plus,
+  Users,
+  MapPin,
+  Package,
+  Zap,
+  MessageSquare,
+  TrendingUp,
+  Calendar,
+  Flame,
+  Target,
+} from "lucide-react";
 import "./home.css";
 
 export default function Home() {
@@ -45,7 +58,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  /* ================= ROTATING AI INSIGHT ================= */
+  /* ================= AI INSIGHT ROTATION ================= */
 
   const insights = [
     "Venue capacity may exceed limit.",
@@ -89,119 +102,231 @@ export default function Home() {
     });
   }, []);
 
+  /* ================= MOUSE PARALLAX BACKGROUND ================= */
+
+  useEffect(() => {
+    const icons = document.querySelectorAll(".bg-icon");
+
+    const handleMouseMove = (e) => {
+      const x = (window.innerWidth / 2 - e.clientX) / 40;
+      const y = (window.innerHeight / 2 - e.clientY) / 40;
+
+      icons.forEach((icon, index) => {
+        const depth = (index + 1) * 0.3;
+        icon.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  /* ================= SCROLL DEPTH ================= */
+
+  useEffect(() => {
+    const icons = document.querySelectorAll(".bg-icon");
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+
+      icons.forEach((icon, index) => {
+        const depth = (index + 1) * 0.06;
+        icon.style.marginTop = `${scrollY * depth}px`;
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  /* ================= AI PARTICLE NETWORK ================= */
+
+  useEffect(() => {
+    const canvas = document.querySelector(".particle-network");
+    const ctx = canvas.getContext("2d");
+
+    let particles = [];
+    const particleCount = 70;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.8;
+        this.vy = (Math.random() - 0.5) * 0.8;
+        this.size = 2;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    function connectParticles() {
+      for (let a = 0; a < particles.length; a++) {
+        for (let b = a; b < particles.length; b++) {
+          const dx = particles[a].x - particles[b].x;
+          const dy = particles[a].y - particles[b].y;
+          const distance = dx * dx + dy * dy;
+
+          if (distance < 9000) {
+            ctx.beginPath();
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "rgba(14,165,233,0.6)";
+      ctx.strokeStyle = "rgba(14,165,233,0.3)";
+
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      connectParticles();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  }, []);
+
   return (
     <div className="home">
 
-      {/* ================= HERO ================= */}
+      <canvas className="particle-network"></canvas>
+
+      <div className="bg-icon icon1">📅</div>
+      <div className="bg-icon icon2">🎤</div>
+      <div className="bg-icon icon3">🎟️</div>
+      <div className="bg-icon icon4">📊</div>
+      <div className="bg-icon icon5">🤖</div>
+
       <section className="hero">
         <h1>AI Smart Event Management System</h1>
         <p className="ai-text">{aiText}</p>
       </section>
 
-      {/* ================= DASHBOARD ================= */}
       <section className="dashboard">
-        <div className="dash-card">
+        <motion.div className="dash-card" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+          <motion.div className="card-icon" animate={{ y: [0, -4, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 16px rgba(14,165,233,0.8))" }}>
+            <Calendar size={32} />
+          </motion.div>
           <h2>{count.events}</h2>
           <span>Total Events</span>
-        </div>
-        <div className="dash-card">
+        </motion.div>
+
+        <motion.div className="dash-card" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+          <motion.div className="card-icon" animate={{ y: [0, -5, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 16px rgba(14,165,233,0.8))" }}>
+            <Flame size={32} />
+          </motion.div>
           <h2>{count.active}</h2>
           <span>Live Now</span>
-        </div>
-        <div className="dash-card">
+        </motion.div>
+
+        <motion.div className="dash-card" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+          <motion.div className="card-icon" animate={{ y: [0, -4, 0] }} transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 16px rgba(14,165,233,0.8))" }}>
+            <TrendingUp size={32} />
+          </motion.div>
           <h2>{count.upcoming}</h2>
           <span>Upcoming</span>
-        </div>
-        <div className="dash-card">
+        </motion.div>
+
+        <motion.div className="dash-card" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+          <motion.div className="card-icon" animate={{ y: [0, -5, 0] }} transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 0.9 }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 16px rgba(14,165,233,0.8))" }}>
+            <Target size={32} />
+          </motion.div>
           <h2>{count.completed}</h2>
           <span>Completed</span>
-        </div>
+        </motion.div>
       </section>
 
-      {/* ================= FEATURES ================= */}
       <section className="features">
+        <Link to="/create" className="card">
+          <motion.div className="feature-icon" animate={{ y: [0, -6, 0] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0 }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 20px rgba(14,165,233,0.9))" }}>
+            <Plus size={40} />
+          </motion.div>
+          <h3>Create Event</h3>
+          <p>Design and launch intelligent events.</p>
+        </Link>
 
-  <Link to="/create" className="card">
-    <div className="card-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M3 12h18M12 3v18" />
-      </svg>
-    </div>
-    <h3>Create Event</h3>
-    <p>Design and launch intelligent events.</p>
-    <span className="card-arrow">→</span>
-  </Link>
+        <Link to="/attendance" className="card">
+          <motion.div className="feature-icon" animate={{ y: [0, -5, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 20px rgba(14,165,233,0.9))" }}>
+            <TrendingUp size={40} />
+          </motion.div>
+          <h3>Attendance Prediction</h3>
+          <p>AI-based turnout estimation.</p>
+        </Link>
 
-  <Link to="/attendance" className="card">
-    <div className="card-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M3 17l6-6 4 4 8-8" />
-      </svg>
-    </div>
-    <h3>Attendance Prediction</h3>
-    <p>AI-based turnout estimation.</p>
-    <span className="card-arrow">→</span>
-  </Link>
+        <Link to="/venue" className="card">
+          <motion.div className="feature-icon" animate={{ y: [0, -6, 0] }} transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 0.4 }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 20px rgba(14,165,233,0.9))" }}>
+            <MapPin size={40} />
+          </motion.div>
+          <h3>Venue Selection</h3>
+          <p>Capacity-aware smart allocation.</p>
+        </Link>
 
-  <Link to="/venue" className="card">
-    <div className="card-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M3 21h18M5 21V7l7-4 7 4v14" />
-      </svg>
-    </div>
-    <h3>Venue Selection</h3>
-    <p>Capacity-aware smart allocation.</p>
-    <span className="card-arrow">→</span>
-  </Link>
+        <Link to="/resources" className="card">
+          <motion.div className="feature-icon" animate={{ y: [0, -5, 0] }} transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 0.6 }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 20px rgba(14,165,233,0.9))" }}>
+            <Package size={40} />
+          </motion.div>
+          <h3>Resources</h3>
+          <p>Equipment and asset management.</p>
+        </Link>
 
-  <Link to="/resources" className="card">
-    <div className="card-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M4 4h16v6H4zM4 14h10v6H4z" />
-      </svg>
-    </div>
-    <h3>Resources</h3>
-    <p>Equipment and asset management.</p>
-    <span className="card-arrow">→</span>
-  </Link>
+        <Link to="/volunteers" className="card">
+          <motion.div className="feature-icon" animate={{ y: [0, -6, 0] }} transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut", delay: 0.8 }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 20px rgba(14,165,233,0.9))" }}>
+            <Zap size={40} />
+          </motion.div>
+          <h3>Volunteers</h3>
+          <p>Skill-based allocation system.</p>
+        </Link>
 
-  <Link to="/volunteers" className="card">
-    <div className="card-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M16 11a4 4 0 10-8 0 4 4 0 008 0zM2 21a8 8 0 0116 0" />
-      </svg>
-    </div>
-    <h3>Volunteers</h3>
-    <p>Skill-based allocation system.</p>
-    <span className="card-arrow">→</span>
-  </Link>
+        <Link to="/feedback" className="card">
+          <motion.div className="feature-icon" animate={{ y: [0, -5, 0] }} transition={{ duration: 3.9, repeat: Infinity, ease: "easeInOut", delay: 1.0 }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 20px rgba(14,165,233,0.9))" }}>
+            <MessageSquare size={40} />
+          </motion.div>
+          <h3>Feedback Analysis</h3>
+          <p>Sentiment-driven insights.</p>
+        </Link>
 
-  <Link to="/feedback" className="card">
-    <div className="card-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M21 15a4 4 0 01-4 4H7l-4 4V7a4 4 0 014-4h10a4 4 0 014 4z" />
-      </svg>
-    </div>
-    <h3>Feedback Analysis</h3>
-    <p>Sentiment-driven insights.</p>
-    <span className="card-arrow">→</span>
-  </Link>
+        <Link to="/participants" className="card">
+          <motion.div className="feature-icon" animate={{ y: [0, -6, 0] }} transition={{ duration: 4.1, repeat: Infinity, ease: "easeInOut", delay: 1.2 }} whileHover={{ scale: 1.2, filter: "drop-shadow(0 0 20px rgba(14,165,233,0.9))" }}>
+            <Users size={40} />
+          </motion.div>
+          <h3>Past Participants</h3>
+          <p>Track returning attendees.</p>
+        </Link>
+      </section>
 
-  <Link to="/participants" className="card">
-    <div className="card-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M17 21v-2a4 4 0 00-3-3.87M7 21v-2a4 4 0 013-3.87M7 7a4 4 0 118 0 4 4 0 01-8 0z" />
-      </svg>
-    </div>
-    <h3>Past Participants</h3>
-    <p>Track returning attendees.</p>
-    <span className="card-arrow">→</span>
-  </Link>
-
-</section>
-
-
-      {/* ================= AI INSIGHT ================= */}
       <section className="ai-insight">
         <h3>AI Insight</h3>
         <p>{insight}</p>

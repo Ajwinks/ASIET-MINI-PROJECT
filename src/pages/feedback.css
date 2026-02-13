@@ -1,0 +1,253 @@
+.feedback-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.particle-network-feedback {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+}
+
+body.dark .particle-network-feedback {
+  opacity: 0.8;
+}
+
+body:not(.dark) .particle-network-feedback {
+  opacity: 0.25;
+}
+
+/* Header Section */
+.feedback-header {
+  text-align: center;
+  margin-bottom: 60px;
+  z-index: 1;
+}
+
+.header-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(168, 85, 247, 0.2));
+  border: 2px solid rgba(14, 165, 233, 0.3);
+  margin-bottom: 20px;
+  color: #0ea5e9;
+  filter: drop-shadow(0 0 16px rgba(14, 165, 233, 0.4));
+}
+
+body.dark .header-icon {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(168, 85, 247, 0.15));
+  border-color: rgba(14, 165, 233, 0.4);
+}
+
+.feedback-header h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #0ea5e9, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.feedback-header p {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+/* Content */
+.feedback-content {
+  width: 100%;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+  z-index: 2;
+}
+
+/* Cards */
+.sentiment-card,
+.rating-card,
+.insights-card,
+.feedback-summary {
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .sentiment-card,
+body.dark .rating-card,
+body.dark .insights-card,
+body.dark .feedback-summary {
+  background: rgba(30, 41, 59, 0.4);
+  border-color: rgba(14, 165, 233, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Headers */
+.sentiment-header,
+.rating-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  color: #0ea5e9;
+}
+
+.sentiment-header h3,
+.rating-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Sentiment */
+.sentiment-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sentiment-positive {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0ea5e9;
+}
+
+.sentiment-positive span {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sentiment-gauge {
+  width: 100%;
+  height: 12px;
+  background: rgba(14, 165, 233, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.gauge-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0ea5e9, #a855f7);
+  border-radius: 6px;
+}
+
+/* Rating */
+.rating-display {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.rating-value {
+  font-size: 56px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #0ea5e9, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.rating-max {
+  font-size: 24px;
+  opacity: 0.6;
+}
+
+.rating-count {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* Insights */
+.insights-card {
+  grid-column: 1 / -1;
+}
+
+.insights-card h3 {
+  margin-bottom: 20px;
+}
+
+.insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.insight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.insight-item svg {
+  color: #0ea5e9;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+
+.insight-item > div {
+  flex: 1;
+}
+
+.insight-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0ea5e9;
+  margin-bottom: 4px;
+}
+
+.insight-text {
+  font-size: 14px;
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+/* Summary */
+.feedback-summary {
+  grid-column: 1 / -1;
+}
+
+.feedback-summary h3 {
+  margin-bottom: 12px;
+}
+
+.feedback-summary p {
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .feedback-header h1 {
+    font-size: 36px;
+  }
+
+  .feedback-content {
+    grid-template-columns: 1fr;
+  }
+
+  .sentiment-card,
+  .rating-card,
+  .insights-card,
+  .feedback-summary {
+    padding: 24px;
+  }
+}
